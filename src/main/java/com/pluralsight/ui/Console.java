@@ -31,5 +31,21 @@ public class Console {
         System.out.print(prompt);
         return Integer.parseInt(scanner.nextLine()); // avoids leftover newline bug from nextInt()
     }
+    public static int getVehicleId(){
+       return promptForInt("Enter Vehicle Id: ");
+    }
+    public static String getModel(){
+        return promptForString("Enter make/model: ");
+    }
+    public static String getColor(){
+        return promptForString("Enter color: ");
+    }
+    public static int getOdometer(){
+        return promptForInt("Enter odometer reading: ");
+    }
+    public static double getPrice(){
+        return promptForDouble("Enter price: ");
+    }
+
 
 }

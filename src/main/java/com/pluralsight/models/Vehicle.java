@@ -22,6 +22,13 @@ public class Vehicle {
         this.vehicleId = vehicleId;
     }
 
+    public String getMakeModel(){
+        return this.makeModel;
+    }
+    public void setMakeModel(String makeModel){
+        this.makeModel = makeModel;
+    }
+
     public String getColor(){
         return this.color;
     }
@@ -44,7 +51,7 @@ public class Vehicle {
 
     @Override
     public String toString(){
-        return String.format("%d %s %s %d $%.2f",
+        return String.format("%-10d %-20s %-10s %-10d $%.2f",
                 vehicleId, makeModel, color, odometerReading, price);
     }
 
