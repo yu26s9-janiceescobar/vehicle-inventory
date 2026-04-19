@@ -1,137 +1,91 @@
 package com.pluralsight;
 import com.pluralsight.ui.Console;
 import com.pluralsight.models.Vehicle;
-
+import com.pluralsight.models.Inventory;
 public class Main {
-    private static Vehicle[] vehicle = new Vehicle[20];
+    private static Inventory inventory = new Inventory();
+    private static Vehicle[] vehicle = inventory.getVehicle();
 
-    private static String displayMenu() {
-        return """
-                What do you want to do?
-                1 - List all vehicles
-                2 - Search by make/model
-                3 - Search by price range
-                4 - Search by color
-                5 - Add a vehicle
-                6 - Quit
-                >\s""";
+    /**
+     * Only vehicles of the model user enter is displayed.
+     */
+    private static void searchByModel(){
+        String model = Console.getModel();
+        Console.displayMakeModel(vehicle, model);
     }
 
-
-    private static int getVehicleCount(Vehicle[] list) {
-        int count = 0;
-        for (Vehicle v : list) {
-            if (v != null) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-
-    private static Vehicle[] loadInventory() {
-        vehicle[0] = new Vehicle(101121, "Ford Explorer", "Red", 45000, 13500);
-        vehicle[1] = new Vehicle(101122, "Toyota Camry", "Blue", 60000, 11000);
-        vehicle[2] = new Vehicle(101123, "Chevrolet Malibu", "Black", 50000, 97000);
-        vehicle[3] = new Vehicle(101124, "Honda Civic", "White", 70000, 75000);
-        vehicle[4] = new Vehicle(101125, "Subaru Outback", "Green", 55000, 14500);
-        vehicle[5] = new Vehicle(101126, "Jeep Wrangler", "Yellow", 30000, 16000);
-        return vehicle;
-    }
-
-
-    private static void displayVehicles(Vehicle[] list) {
-        int length = getVehicleCount(list);
-        for (int i = 0; i < length; i++){
-            System.out.println(list[i]);
-        }
-    }
-
-
-    private static void listAllVehicles() {
-        System.out.printf("%43s%n"," Full Vehicle Inventory");
-        displayVehicles(vehicle);
-    }
-
-    private static Vehicle[] addVehicle(){
-        int index = getVehicleCount(vehicle);
+    /**
+     * Adds vehicle information user enters to inventory.
+     */
+    private static void addVehicle(){
+        int index = Inventory.getVehicleCount(vehicle);
         int vehicleId = Console.getVehicleId();
         String makeModel = Console.getModel();
         String color = Console.getColor();
         int odometerReading = Console.getOdometer();
         double price = Console.getPrice();
-        vehicle[index] = new Vehicle(vehicleId, makeModel, color, odometerReading, price);
-        return vehicle;
-
+        vehicle[index] = new Vehicle(vehicleId, makeModel, color, odometerReading, price); 
     }
-    private static Vehicle[] searchByModel(){
-        Vehicle[] filteredByModel = new Vehicle[20];
-        int vehiclesFound = 0;
-        String makeModel = Console.getModel();
 
-        int length = getVehicleCount(vehicle);
-        for (int i = 0; i < length; i++){
-            if ((vehicle[i].getMakeModel()).equalsIgnoreCase(makeModel)){
-                filteredByModel[vehiclesFound] = vehicle[i];
-                vehiclesFound++;
-            }
+    /**
+     * Displays full inventory of vehicles.
+     */
+    private static void listAllVehicles(){
+        Console.displayAllVehicles(vehicle);
+    }
+
+    /**
+     * Only vehicles between the price range user enters is displayed.
+     */
+    private static void searchByPrice() {
+
+        String priceRange;
+        int index;
+        do {
+           priceRange = Console.promptForString("Enter price range (min-max): ");
+           index = priceRange.indexOf("-"); // finds index of dash included in user response
+           if (index == -1){ // index is -1 if the dash in user input is not found.
+               System.out.println("Please separate minimum and maximum price range using a dash (min-max)");
+           }
         }
-        return filteredByModel;
-    }
-    private static Vehicle[] searchByPrice() {
-        Vehicle[] filterByPrice = new Vehicle[20];
+        while(index == -1); // Will repeat until user enters the correct format.
 
-        String priceRange = Console.promptForString("Enter price range (min-max): ");
-        int index = priceRange.indexOf("-");
-        int min = Integer.parseInt(priceRange.substring(0, index));
-        int max = Integer.parseInt(priceRange.substring(index + 1));
-
-        int length = getVehicleCount(vehicle);
-        int counter = 0;
-        for (int i = 0; i < length; i++){
-            if ((min < vehicle[i].getPrice() && vehicle[i].getPrice() < max)){
-                filterByPrice[counter] = vehicle[i];
-                counter++;
-            }
-        }
-        return filterByPrice;
+        double min = Integer.parseInt(priceRange.substring(0, index)); // Stores first number in string input
+        double max = Integer.parseInt(priceRange.substring(index + 1)); // Stores second number in string input
+        Console.displayByPrice(vehicle, min, max);
 
     }
 
-    public static Vehicle[] searchByColor(){
-        Vehicle[] filterByColor = new Vehicle[20];
+    /**
+     * Only vehicles with the color that the user enters is displayed.
+     */
+    private static void searchByColor(){
         String color = Console.getColor();
-        int length = getVehicleCount(vehicle);
-        int counter = 0;
-        for (int i = 0; i < length; i++){
-            if (vehicle[i].getColor().equalsIgnoreCase(color)){
-                filterByColor[counter] = vehicle[i];
-                counter++;
-            }
-        }
-        return filterByColor;
+        Console.displayByColor(vehicle, color);
     }
 
+    /**
+     * Displays menu and menu options allowing user to choose an option including
+     * list all vehicles, search by make/model,search by price range,
+     * search by color, add a vehicle to inventory, or quit program.
+     */
     public static void main (String[] args){
         int option;
-        vehicle = loadInventory();
         do {
-            option = Console.promptForInt(displayMenu());
+            Console.displayMenu();
+            option = Console.promptForInt("Enter an option: ");
             switch (option) {
                 case 1:
                     listAllVehicles();
                     break;
                 case 2:
-                    Vehicle[] filterByModel = searchByModel();
-                    displayVehicles(filterByModel);
+                    searchByModel();
                     break;
                 case 3:
-                    Vehicle[] filterByPrice = searchByPrice();
-                    displayVehicles(filterByPrice);
+                    searchByPrice();
                     break;
                 case 4:
-                    Vehicle[] filterByColor = searchByColor();
-                    displayVehicles(filterByColor);
+                    searchByColor();
                     break;
                 case 5:
                     addVehicle();

@@ -7,6 +7,14 @@ public class Vehicle {
     private int odometerReading;
     private double price;
 
+    /**
+     * Creates a vehicle with vehicle information.
+     * @param vehicleId the id of vehicle.
+     * @param makeModel the make/model of vehicle.
+     * @param color the color of vehicle.
+     * @param odometerReading the odometer reading of vehicle.
+     * @param price the price of the vehicle.
+     */
     public Vehicle(int vehicleId, String makeModel, String color, int odometerReading, double price){
         this.vehicleId = vehicleId;
         this.makeModel = makeModel;
@@ -49,10 +57,14 @@ public class Vehicle {
         return this.price;
     }
 
+    /**
+     * Organized format of vehicle details
+     * @return String of vehicle details in organized format.
+     */
     @Override
     public String toString(){
-        return String.format("%-10d %-20s %-10s %-10d $%.2f",
-                vehicleId, makeModel, color, odometerReading, price);
+        return String.format("%7d %-10s %-19s %-14s %-15d $%,.2f %n",
+                vehicleId," ", makeModel, color, odometerReading, price);
     }
 
 }

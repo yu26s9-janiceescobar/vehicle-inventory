@@ -1,5 +1,7 @@
 package com.pluralsight.ui;
 import java.util.*;
+import com.pluralsight.models.Vehicle;
+
 public class Console {
     private static final Scanner scanner = new Scanner(System.in);
     /**
@@ -47,5 +49,74 @@ public class Console {
         return promptForDouble("Enter price: ");
     }
 
+    public static void header(){
+        System.out.printf("%-18s %-19s %-10s %-22s %s %n", "Vehicle Id", "Make/Model", "Color","Odometer Reading", "Price");
+    }
+    public static void noMatchesFoundMessage(){
+        System.out.println("Oops! No matches found! Try again.");
+    }
+    public static void displayAllVehicles(Vehicle[] vehicle) {
+        for (Vehicle v: vehicle){
+            if (v != null) {
+                header();
+                System.out.println(v);
+            }
+        }
+    }
+    public static void displayByPrice(Vehicle[] vehicle, double min, double max){
+        int count = 0;
+        for (Vehicle v: vehicle){
+            if (v != null){
+                if (min < v.getPrice() && v.getPrice() < max ){
+                    header();
+                    System.out.println(v);
+                    count++;
+                }
+            }
+        }
+        if (count==0){
+            noMatchesFoundMessage();
+        }
+    }
+    public static void displayByColor(Vehicle[] vehicle, String color){
+        int count = 0;
+        for (Vehicle v: vehicle){
+            if (v != null){
+                if (v.getColor().equalsIgnoreCase(color)){
+                    header();
+                    System.out.println(v);
+                    count++;
+                }
+            }
+        }
+        if (count == 0){
+            noMatchesFoundMessage();
+        }
+    }
+    public static void displayMakeModel(Vehicle[] vehicle, String makeModel){
+        int count = 0;
+        for (Vehicle v: vehicle){
+            if (v != null) {
+                if (v.getMakeModel().equalsIgnoreCase(makeModel)){
+                    header();
+                    System.out.println(v);
+                    count++;
+                }
+            }
+        }
+        if (count == 0){
+            noMatchesFoundMessage();
+        }
+    }
+    public static void displayMenu(){
+       System.out.println("""
+                What do you want to do?
+                1 - List all vehicles
+                2 - Search by make/model
+                3 - Search by price range
+                4 - Search by color
+                5 - Add a vehicle
+                6 - Quit""");
+    }
 
 }
